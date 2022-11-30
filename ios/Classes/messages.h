@@ -7,68 +7,68 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class FLTTextureMessage;
-@class FLTCreateMessage;
-@class FLTLoopingMessage;
-@class FLTVolumeMessage;
-@class FLTPlaybackSpeedMessage;
-@class FLTPositionMessage;
-@class FLTMixWithOthersMessage;
+@class RtmpFLTTextureMessage;
+@class RmtpFLTCreateMessage;
+@class RtmpFLTLoopingMessage;
+@class RtmpFLTVolumeMessage;
+@class RtmpFLTPlaybackSpeedMessage;
+@class RtmpFLTPositionMessage;
+@class RtmpFLTMixWithOthersMessage;
 
-@interface FLTTextureMessage : NSObject
+@interface RtmpFLTTextureMessage : NSObject
 @property(nonatomic, strong, nullable) NSNumber *textureId;
 @end
 
-@interface FLTCreateMessage : NSObject
+@interface RmtpFLTCreateMessage : NSObject
 @property(nonatomic, copy, nullable) NSString *asset;
 @property(nonatomic, copy, nullable) NSString *uri;
 @property(nonatomic, copy, nullable) NSString *packageName;
 @property(nonatomic, copy, nullable) NSString *formatHint;
 @end
 
-@interface FLTLoopingMessage : NSObject
+@interface RtmpFLTLoopingMessage : NSObject
 @property(nonatomic, strong, nullable) NSNumber *textureId;
 @property(nonatomic, strong, nullable) NSNumber *isLooping;
 @end
 
-@interface FLTVolumeMessage : NSObject
+@interface RtmpFLTVolumeMessage : NSObject
 @property(nonatomic, strong, nullable) NSNumber *textureId;
 @property(nonatomic, strong, nullable) NSNumber *volume;
 @end
 
-@interface FLTPlaybackSpeedMessage : NSObject
+@interface RtmpFLTPlaybackSpeedMessage : NSObject
 @property(nonatomic, strong, nullable) NSNumber *textureId;
 @property(nonatomic, strong, nullable) NSNumber *speed;
 @end
 
-@interface FLTPositionMessage : NSObject
+@interface RtmpFLTPositionMessage : NSObject
 @property(nonatomic, strong, nullable) NSNumber *textureId;
 @property(nonatomic, strong, nullable) NSNumber *position;
 @end
 
-@interface FLTMixWithOthersMessage : NSObject
+@interface RtmpFLTMixWithOthersMessage : NSObject
 @property(nonatomic, strong, nullable) NSNumber *mixWithOthers;
 @end
 
-@protocol FLTVideoPlayerApi
+@protocol RtmpFLTVideoPlayerApi
 - (void)initialize:(FlutterError *_Nullable *_Nonnull)error;
-- (nullable FLTTextureMessage *)create:(FLTCreateMessage *)input
+- (nullable RtmpFLTTextureMessage *)create:(RmtpFLTCreateMessage *)input
                                  error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)dispose:(FLTTextureMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)setLooping:(FLTLoopingMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)setVolume:(FLTVolumeMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)setPlaybackSpeed:(FLTPlaybackSpeedMessage *)input
+- (void)dispose:(RtmpFLTTextureMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setLooping:(RtmpFLTLoopingMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setVolume:(RtmpFLTVolumeMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setPlaybackSpeed:(RtmpFLTPlaybackSpeedMessage *)input
                    error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)play:(FLTTextureMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
-- (nullable FLTPositionMessage *)position:(FLTTextureMessage *)input
+- (void)play:(RtmpFLTTextureMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable RtmpFLTPositionMessage *)position:(RtmpFLTTextureMessage *)input
                                     error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)seekTo:(FLTPositionMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)pause:(FLTTextureMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)setMixWithOthers:(FLTMixWithOthersMessage *)input
+- (void)seekTo:(RtmpFLTPositionMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)pause:(RtmpFLTTextureMessage *)input error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setMixWithOthers:(RtmpFLTMixWithOthersMessage *)input
                    error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
-extern void FLTVideoPlayerApiSetup(id<FlutterBinaryMessenger> binaryMessenger,
-                                   id<FLTVideoPlayerApi> _Nullable api);
+extern void RtmpFLTVideoPlayerApiSetup(id<FlutterBinaryMessenger> binaryMessenger,
+                                   id<RtmpFLTVideoPlayerApi> _Nullable api);
 
 NS_ASSUME_NONNULL_END
