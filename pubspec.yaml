@@ -29,7 +29,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  http: ^0.13.4
+  http: ^1.2.1
   youtube_explode_dart: ^1.10.10
 
 dev_dependencies:
