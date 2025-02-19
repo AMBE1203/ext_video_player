@@ -265,9 +265,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     String finalYoutubeUrl = dataSource;
     if (_getIdFromUrl(dataSource) != null) {
       try {
-        Map<String, String> videoUrls = Map();
         String? _videoId = _getIdFromUrl(dataSource);
-        String _fetchUrl = "";
 
         var yt = YoutubeExplode();
 
@@ -380,13 +378,13 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   static String? _getIdFromUrl(String url, [bool trimWhitespaces = true]) {
     List<RegExp> _regexps = [
       RegExp(
-          r'^https:\/\/(?:www\.|m\.)?youtube\.com\/watch\?v=([_\-a-zA-Z0-9]{11}).*$'),
+          r'^https://(?:www\.|m\.)?youtube\.com/watch\?v=([_\-a-zA-Z0-9]{11}).*$'),
       RegExp(
-          r'^https:\/\/(?:www\.|m\.)?youtube(?:-nocookie)?\.com\/embed\/([_\-a-zA-Z0-9]{11}).*$'),
-      RegExp(r'^https:\/\/youtu\.be\/([_\-a-zA-Z0-9]{11}).*$')
+          r'^https://(?:www\.|m\.)?youtube(?:-nocookie)?\.com/embed/([_\-a-zA-Z0-9]{11}).*$'),
+      RegExp(r'^https://youtu\.be/([_\-a-zA-Z0-9]{11}).*$')
     ];
 
-    if (url == null || url.isEmpty) {
+    if (url.isEmpty) {
       return null;
     }
 
@@ -610,7 +608,7 @@ class _VideoAppLifeCycleObserver extends Object with WidgetsBindingObserver {
   final VideoPlayerController _controller;
 
   void initialize() {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -630,7 +628,7 @@ class _VideoAppLifeCycleObserver extends Object with WidgetsBindingObserver {
   }
 
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 }
 
