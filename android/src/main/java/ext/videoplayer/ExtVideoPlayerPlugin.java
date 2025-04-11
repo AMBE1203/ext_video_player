@@ -32,56 +32,31 @@ public class ExtVideoPlayerPlugin implements FlutterPlugin, VideoPlayerApi {
   private FlutterState flutterState;
   private VideoPlayerOptions options = new VideoPlayerOptions();
 
-  /** Register this with the v2 embedding for the plugin to respond to lifecycle callbacks. */
   public ExtVideoPlayerPlugin() {}
-
-  @SuppressWarnings("deprecation")
-  private ExtVideoPlayerPlugin(io.flutter.plugin.common.PluginRegistry.Registrar registrar) {
-    this.flutterState =
-        new FlutterState(
-            registrar.context(),
-            registrar.messenger(),
-            registrar::lookupKeyForAsset,
-            registrar::lookupKeyForAsset,
-            registrar.textures());
-    flutterState.startListening(this, registrar.messenger());
-  }
-
-  /** Registers this with the stable v1 embedding. Will not respond to lifecycle events. */
-  @SuppressWarnings("deprecation")
-  public static void registerWith(io.flutter.plugin.common.PluginRegistry.Registrar registrar) {
-    final ExtVideoPlayerPlugin plugin = new ExtVideoPlayerPlugin(registrar);
-    registrar.addViewDestroyListener(
-        view -> {
-          plugin.onDestroy();
-          return false; // We are not interested in assuming ownership of the NativeView.
-        });
-  }
 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding binding) {
-
     if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
       try {
         HttpsURLConnection.setDefaultSSLSocketFactory(new CustomSSLSocketFactory());
       } catch (KeyManagementException | NoSuchAlgorithmException e) {
         Log.w(
-            TAG,
-            "Failed to enable TLSv1.1 and TLSv1.2 Protocols for API level 19 and below.\n"
-                + "For more information about Socket Security, please consult the following link:\n"
-                + "https://developer.android.com/reference/javax/net/ssl/SSLSocket",
-            e);
+                TAG,
+                "Failed to enable TLSv1.1 and TLSv1.2 Protocols for API level 19 and below.\n"
+                        + "For more information about Socket Security, please consult the following link:\n"
+                        + "https://developer.android.com/reference/javax/net/ssl/SSLSocket",
+                e);
       }
     }
 
     final FlutterInjector injector = FlutterInjector.instance();
     this.flutterState =
-        new FlutterState(
-            binding.getApplicationContext(),
-            binding.getBinaryMessenger(),
-            injector.flutterLoader()::getLookupKeyForAsset,
-            injector.flutterLoader()::getLookupKeyForAsset,
-            binding.getTextureRegistry());
+            new FlutterState(
+                    binding.getApplicationContext(),
+                    binding.getBinaryMessenger(),
+                    injector.flutterLoader()::getLookupKeyForAsset,
+                    injector.flutterLoader()::getLookupKeyForAsset,
+                    binding.getTextureRegistry());
     flutterState.startListening(this, binding.getBinaryMessenger());
   }
 
@@ -103,11 +78,6 @@ public class ExtVideoPlayerPlugin implements FlutterPlugin, VideoPlayerApi {
   }
 
   private void onDestroy() {
-    // The whole FlutterView is being destroyed. Here we release resources acquired for all
-    // instances
-    // of VideoPlayer. Once https://github.com/flutter/flutter/issues/19358 is resolved this may
-    // be replaced with just asserting that videoPlayers.isEmpty().
-    // https://github.com/flutter/flutter/issues/20989 tracks this.
     disposeAllPlayers();
   }
 
@@ -117,37 +87,37 @@ public class ExtVideoPlayerPlugin implements FlutterPlugin, VideoPlayerApi {
 
   public TextureMessage create(CreateMessage arg) {
     TextureRegistry.SurfaceTextureEntry handle =
-        flutterState.textureRegistry.createSurfaceTexture();
+            flutterState.textureRegistry.createSurfaceTexture();
     EventChannel eventChannel =
-        new EventChannel(
-            flutterState.binaryMessenger, "flutter.io/videoPlayer/videoEvents" + handle.id());
+            new EventChannel(
+                    flutterState.binaryMessenger, "flutter.io/videoPlayer/videoEvents" + handle.id());
 
     VideoPlayer player;
     if (arg.getAsset() != null) {
       String assetLookupKey;
       if (arg.getPackageName() != null) {
         assetLookupKey =
-            flutterState.keyForAssetAndPackageName.get(arg.getAsset(), arg.getPackageName());
+                flutterState.keyForAssetAndPackageName.get(arg.getAsset(), arg.getPackageName());
       } else {
         assetLookupKey = flutterState.keyForAsset.get(arg.getAsset());
       }
       player =
-          new VideoPlayer(
-              flutterState.applicationContext,
-              eventChannel,
-              handle,
-              "asset:///" + assetLookupKey,
-              null,
-              options);
+              new VideoPlayer(
+                      flutterState.applicationContext,
+                      eventChannel,
+                      handle,
+                      "asset:///" + assetLookupKey,
+                      null,
+                      options);
     } else {
       player =
-          new VideoPlayer(
-              flutterState.applicationContext,
-              eventChannel,
-              handle,
-              arg.getUri(),
-              arg.getFormatHint(),
-              options);
+              new VideoPlayer(
+                      flutterState.applicationContext,
+                      eventChannel,
+                      handle,
+                      arg.getUri(),
+                      arg.getFormatHint(),
+                      options);
     }
     videoPlayers.put(handle.id(), player);
 
@@ -221,11 +191,11 @@ public class ExtVideoPlayerPlugin implements FlutterPlugin, VideoPlayerApi {
     private final TextureRegistry textureRegistry;
 
     FlutterState(
-        Context applicationContext,
-        BinaryMessenger messenger,
-        KeyForAssetFn keyForAsset,
-        KeyForAssetAndPackageName keyForAssetAndPackageName,
-        TextureRegistry textureRegistry) {
+            Context applicationContext,
+            BinaryMessenger messenger,
+            KeyForAssetFn keyForAsset,
+            KeyForAssetAndPackageName keyForAssetAndPackageName,
+            TextureRegistry textureRegistry) {
       this.applicationContext = applicationContext;
       this.binaryMessenger = messenger;
       this.keyForAsset = keyForAsset;
